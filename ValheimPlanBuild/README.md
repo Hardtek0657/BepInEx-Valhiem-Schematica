@@ -1,25 +1,34 @@
-# Valheim Plan Build
+# Valheim PlanBuild
 
-Client-side planning mode for Valheim. Use `/planbuild` to toggle virtual placement: hammer placements become visible ghost plans, cost no resources, and do not create real world pieces.
+A BepInEx client-side planning mod for Valheim. Toggle `/planbuild` to enter a virtual building mode where hammer placements become visible ghost plans — no resources consumed, no real pieces placed.
 
 ## Commands
 
-- `/planbuild` toggles planning mode.
-- `/planbuild on` and `/planbuild off` set the mode explicitly.
-- `/planbuild create <name>` starts a new empty named plan when no plan is loaded and turns planning mode on.
-- `/planbuild save <name>` sends the current planned pieces to the relay.
-- `/planbuild load <name>` requests the named save from the relay.
-- `/planbuild remove` removes the planned piece nearest the crosshair hit point.
-- `/planbuild clear` clears local planned pieces.
-- `/planbuild status` shows current mode, piece count, and relay state.
-- `/planbuild reconnect` forces the relay WebSocket to reconnect.
+| Command | Description |
+|---|---|
+| `/planbuild` | Toggle planning mode on/off |
+| `/planbuild on` / `off` | Set mode explicitly |
+| `/planbuild create <name>` | Start a new empty named plan (enables planning mode) |
+| `/planbuild save <name>` | Send current planned pieces to the relay |
+| `/planbuild load <name>` | Load a named plan from the relay |
+| `/planbuild remove` | Remove the ghost piece nearest the crosshair |
+| `/planbuild clear` | Clear all local planned pieces |
+| `/planbuild status` | Show mode, piece count, and relay connection state |
+| `/planbuild reconnect` | Force the relay WebSocket to reconnect |
 
 ## Relay
 
-The default relay URL is `wss://127.0.0.1:5001/planbuild`, intended for a TLS web-server proxy forwarding to the relay.
+Plans are shared between players via the **PlanBuildRelay** WebSocket server. See the [`planbuild-relay`](../../tree/planbuild-relay) branch for the relay source and setup instructions.
 
-`PlanBuildRelay` is a minimal ASP.NET Core WebSocket relay. It listens on port `5001`, stores named save frames under `planbuild-saves`, and treats each world/save-name pair as its own live plan. Clients do not keep local plan save files.
+- Default relay URL: `wss://127.0.0.1:5001/planbuild`
+- Relay listens on port `5001` and stores named save frames under `planbuild-saves/`
+- Each world/save-name pair is its own live plan
+- Ghost visuals are local-mode gated — relay data syncs in the background, but ghosts only appear while planning mode is on
 
-Every realtime `PLACE` and `REMOVE` includes the active save name. The relay updates that named file before broadcasting the change to other clients that already loaded the same save.
+## Building
 
-Ghost visuals are local-mode gated: relay data can sync while `/planbuild` is off, but ghosts are only instantiated while plan build mode is enabled.
+Open `ValheimPlanBuild.csproj` in your IDE or build with:
+
+```
+dotnet build
+```
