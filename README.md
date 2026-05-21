@@ -1,4 +1,4 @@
-# Valheim PlanBuild
+# Valheim PlanBuild (Heavily WIP Experimental!)
 
 A BepInEx client-side planning mod for Valheim. Toggle `/planbuild` to enter a virtual building mode where hammer placements become visible ghost plans — no resources consumed, no real pieces placed.
 

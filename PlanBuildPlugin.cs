@@ -151,7 +151,7 @@ public sealed class PlanBuildPlugin : BaseUnityPlugin
     {
         PlanningEnabled = enabled;
         World.SetVisible(enabled);
-        
+
         // Enable/disable fullbright for better visibility
         if (enabled)
         {
